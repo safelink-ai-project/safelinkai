@@ -1,7 +1,7 @@
-from .url_heuristics import url_heuristics
-from .dynamic_scan import dynamic_scan
-from .behaviour_analysis import behaviour_analysis
-from .risk_engine import calculate_risk
+from url_heuristics import url_heuristics
+from dynamic_scan import dynamic_scan
+from behaviour_analysis import behaviour_analysis
+from risk_engine import calculate_risk
 
 def scan_url(url):
 
