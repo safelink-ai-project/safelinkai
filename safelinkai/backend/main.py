@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.scanner import scan_url
+from scanner import scan_url
 
 app = FastAPI()
 
