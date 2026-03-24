@@ -15,7 +15,6 @@ def dynamic_scan(url):
                 args=["--no-sandbox", "--disable-dev-shm-usage"]
             )
             page = browser.new_page()
-
             page.goto(url, timeout=10000)
             page.wait_for_load_state("domcontentloaded")
 
@@ -24,11 +23,7 @@ def dynamic_scan(url):
             data["password_fields"] = page.locator("input[type=password]").count()
             data["scripts"] = page.locator("script").count()
 
-            # Optional: screenshot only in memory (no file writes)
-            # page.screenshot(path="scan.png")  # Avoid in Railway
-
             browser.close()
-
     except Exception as e:
         data["error"] = "Page failed to load"
         data["details"] = str(e)
