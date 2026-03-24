@@ -14,7 +14,7 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
     resultDiv.innerHTML = "Scanning...";
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/scan?url=${encodeURIComponent(url)}`);
+        const response = await fetch(`http://safelinkai-production.up.railway.app/scan?url=${encodeURIComponent(url)}`);
         const data = await response.json();
 
         resultDiv.innerHTML = `
