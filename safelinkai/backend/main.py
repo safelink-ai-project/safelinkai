@@ -6,6 +6,8 @@ import uvicorn
 app = FastAPI()
 
 @app.get("/scan")
+def home()
+    return {"status": "server is running"}
 def scan(url: str):
     result = scan_url(url)
     return result
