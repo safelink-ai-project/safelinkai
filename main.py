@@ -1,33 +1,35 @@
 import os
-from fastapi import FastAPI
-from scanner import scan_url  # Make sure scanner.py is in the same directory
+from fastapi import FastAPI, HTTPException
+from fastapi.concurrency import run_in_threadpool
+from scanner import scan_url  # Your scanner.py
 
-app = FastAPI(title="SafeLinkAI")
+app = FastAPI(title="SafeLinkAI Async")
 
 @app.get("/")
-def home():
+async def home():
     return {"status": "server is running"}
 
 @app.get("/scan")
-def scan(url: str):
+async def scan(url: str):
     """
-    Scan a URL and return risk assessment.
-    Example usage: /scan?url=https://example.com
+    Asynchronous scanning endpoint.
+    Runs scan_url() in a separate thread to avoid blocking.
     """
-    result = scan_url(url)
+    if not url.startswith(("http://", "https://")):
+        raise HTTPException(status_code=400, detail="URL must start with http:// or https://")
+
+    try:
+        # Run the synchronous scan_url in a threadpool
+        result = await run_in_threadpool(scan_url, url)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Scan failed: {str(e)}")
+
     return result
 
 # ------------------------------
-# Run Uvicorn via Python so PORT works
+# Run Uvicorn with dynamic PORT
 # ------------------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Railway sets this automatically
-    uvicorn_options = {
-        "app": "main:app",
-        "host": "0.0.0.0",
-        "port": port,
-        "log_level": "info",
-        "reload": False  # Disable reload for production
-    }
     import uvicorn
-    uvicorn.run(**uvicorn_options)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
