@@ -9,7 +9,7 @@ document.getElementById("scanBtn").addEventListener("click", async () => {
 
     document.getElementById("result").classList.add("hidden");
 
-    const response = await fetch(`http://safelinkai-production.up.railway.app/scan?url=${encodeURIComponent(url)}`);
+    const response = await fetch(`https://web-production-13232.up.railway.app/scan?url=${encodeURIComponent(url)}`);
 
     const data = await response.json();
 
