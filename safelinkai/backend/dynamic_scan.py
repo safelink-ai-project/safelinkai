@@ -1,5 +1,4 @@
 def dynamic_scan(url):
-
     data = {
         "title": None,
         "forms": 0,
@@ -11,12 +10,10 @@ def dynamic_scan(url):
         from playwright.sync_api import sync_playwright
 
         with sync_playwright() as p:
-
             browser = p.chromium.launch(
                 headless=True,
                 args=["--no-sandbox", "--disable-dev-shm-usage"]
             )
-
             page = browser.new_page()
 
             page.goto(url, timeout=10000)
@@ -26,6 +23,9 @@ def dynamic_scan(url):
             data["forms"] = page.locator("form").count()
             data["password_fields"] = page.locator("input[type=password]").count()
             data["scripts"] = page.locator("script").count()
+
+            # Optional: screenshot only in memory (no file writes)
+            # page.screenshot(path="scan.png")  # Avoid in Railway
 
             browser.close()
 
